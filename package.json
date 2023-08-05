@@ -1,0 +1,29 @@
+{
+  "name": "s3-image-upload",
+  "version": "1.0.0",
+  "description": "This repository provides a solution for uploading images to AWS S3 and automatically triggering a Lambda function upon successful upload. The code included in this repository allows you to seamlessly store image files in an S3 bucket and efficiently handle the triggered events with a Lambda function. It serves as a practical starting point for implementing image upload functionality with event-driven processing using AWS services.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "AWS",
+    "S3",
+    "image",
+    "upload"
+  ],
+  "author": "Nzhdeh Barseghyan",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.1420.0",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "multer": "^1.4.5-lts.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
