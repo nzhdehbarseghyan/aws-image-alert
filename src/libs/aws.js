@@ -1,4 +1,7 @@
 import AWS from 'aws-sdk';
+import { Upload } from "@aws-sdk/lib-storage";
+import { S3 } from "@aws-sdk/client-s3";
+import { SNS } from "@aws-sdk/client-sns";
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -8,17 +11,22 @@ AWS.config.update({
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 });
 
-const s3 = new AWS.S3();
-const sns = new AWS.SNS();
+const s3 = new S3();
+const sns = new SNS();
 
 export const s3Upload = async (file) => {
     try {
         const PROJECT_NAME = process.env.AWS_PROJECT_NAME
-        return await s3.upload({
-            Bucket: process.env.AWS_BUCKET_NAME,
-            Key: PROJECT_NAME + '/' + file.originalname,
-            Body: file.buffer
-        }).promise()
+
+        return await new Upload({
+            client: s3,
+
+            params: {
+                Bucket: process.env.AWS_BUCKET_NAME,
+                Key: PROJECT_NAME + '/' + file.originalname,
+                Body: file.buffer
+            }
+        }).done();
     } catch (e) {
         console.log(' AWS uploading Error', e);
         return e;
@@ -31,18 +39,18 @@ export const snsSubscribeToEmail = async (email) => {
             Protocol: 'EMAIL',
             TopicArn: process.env.AWS_SNS_TOPIC_ARN,
             Endpoint: email
-        }).promise();
+        });
 
-        // const result = await sns.confirmSubscription({
+        // const result = await sns.confirmSubscription({// TODO us this to confirm subscription
         //     TopicArn: process.env.AWS_SNS_TOPIC_ARN,
         //     SubscriptionArn: subscription.SubscriptionArn
-        // }).promise();
+        // });
 
         // sns.unsubscribe({
         //     SubscriptionArn: subscription.SubscriptionArn
         // })
 
-        // const attr = await sns.getSubscriptionAttributes(subscription.SubscriptionArn).promise()
+        // const attr = await sns.getSubscriptionAttributes(subscription.SubscriptionArn)
     } catch (e) {
         console.log(' snsSubscribeToEmail Error', e);
         return e;
@@ -54,7 +62,7 @@ export const snsPublishNotification = async (message) => {
         const publishedNot = await sns.publish({
             TopicArn: process.env.AWS_SNS_TOPIC_ARN,
             Message: message
-        }).promise();
+        });
 
         return publishedNot.MessageId;
     } catch (e) {
