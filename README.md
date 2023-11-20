@@ -33,14 +33,17 @@ actions based on user-uploaded images in an S3 bucket.
 
 ## Setup process
 ```bash
-# 1- Clone the repo 
+# Clone the repo 
 git clone https://github.com/nzhdehbarseghyan/aws-image-alert.git
 
-# 2 Install dependencies
+# Install dependencies
 npm install
 
 # Copy the ".env.example" file and create a ".env" file
 # Configure AWS credentials and S3 bucket settings.
+
+# To run the project
+npm start
 
 ```
 
