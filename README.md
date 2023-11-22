@@ -47,6 +47,12 @@ npm start
 
 ```
 
+## Lambda Function
+```bash
+# Redirect to the lambda-function directory and run this to zip the contents of the lambda-function directory.
+zip -r9 lambda-function .
+```
+
 ## License
 This project is licensed under the MIT License.
 

@@ -62,10 +62,12 @@ export const snsSubscribeToEmail = async (email) => {
 
 export const snsPublishNotification = async (message) => {
     try {
-        const publishedNot = await sns.publish({
+        const body = {
             TopicArn: process.env.AWS_SNS_TOPIC_ARN,
-            Message: message
-        });
+            Message: JSON.stringify(message)
+        }
+
+        const publishedNot = await sns.publish(body);
 
         return publishedNot.MessageId;
     } catch (e) {

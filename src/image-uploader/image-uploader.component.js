@@ -7,7 +7,13 @@ const imageUploader = async (req, res) => {
     try {
         const uploadedFile= await s3Upload(req.file);
         // const subscribedNot = await snsSubscribeToEmail('examle@yopmail.com');
-        const notification = await snsPublishNotification(`File uploaded in this path ${uploadedFile.Location}`)
+        const snsData = {
+            bucket: process.env.AWS_BUCKET_NAME,
+            key: uploadedFile.Key,
+            location: uploadedFile.Location
+        }
+
+        await snsPublishNotification(snsData)
 
         res.status(200).send({ message: 'Success', data: uploadedFile.Location });
     } catch (e) {
