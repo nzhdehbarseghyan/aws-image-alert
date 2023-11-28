@@ -17,6 +17,12 @@ dotenv.config();
 const s3 = new S3();
 const sns = new SNS();
 
+/**
+ * Uploads a file to the AWS S3 bucket.
+ *
+ * @param {Object} file - The file to be uploaded.
+ * @returns {Promise} - A promise that resolves when the upload is completed.
+ */
 export const s3Upload = async (file) => {
     try {
         const PROJECT_NAME = process.env.AWS_PROJECT_NAME
@@ -36,6 +42,11 @@ export const s3Upload = async (file) => {
     }
 }
 
+/**
+ * Subscribes an email address to the AWS SNS topic.
+ * @param {string} email - The email address to subscribe.
+ * @returns {Promise} - A promise that resolves when the subscription is successful or rejects with an error.
+ */
 export const snsSubscribeToEmail = async (email) => {
     try {
         const subscription = await sns.subscribe({
@@ -44,7 +55,8 @@ export const snsSubscribeToEmail = async (email) => {
             Endpoint: email
         });
 
-        // const result = await sns.confirmSubscription({// TODO us this to confirm subscription
+        // TODO: Use the following code to confirm subscription
+        // const result = await sns.confirmSubscription({
         //     TopicArn: process.env.AWS_SNS_TOPIC_ARN,
         //     SubscriptionArn: subscription.SubscriptionArn
         // });
@@ -55,11 +67,16 @@ export const snsSubscribeToEmail = async (email) => {
 
         // const attr = await sns.getSubscriptionAttributes(subscription.SubscriptionArn)
     } catch (e) {
-        console.log(' snsSubscribeToEmail Error', e);
+        console.log('snsSubscribeToEmail Error', e);
         return e;
     }
 }
 
+/**
+ * Publishes a notification message to an AWS SNS topic.
+ * @param {Object} message - The message to be published.
+ * @returns {Promise<string>} - A promise that resolves to the published notification message ID.
+ */
 export const snsPublishNotification = async (message) => {
     try {
         const body = {
@@ -71,7 +88,7 @@ export const snsPublishNotification = async (message) => {
 
         return publishedNot.MessageId;
     } catch (e) {
-        console.log(' snsPublishMsg Error', e);
+        console.log('snsPublishMsg Error', e);
         return e;
     }
 }

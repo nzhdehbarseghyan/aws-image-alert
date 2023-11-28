@@ -1,7 +1,10 @@
 import { s3Upload, snsPublishNotification, snsSubscribeToEmail } from '../libs/aws.js';
 
 /**
- * Upload Image Into AWS S3
+ * Uploads an image to AWS S3 and publishes a notification using SNS.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
  * */
 const imageUploader = async (req, res) => {
     try {
@@ -12,7 +15,6 @@ const imageUploader = async (req, res) => {
             key: uploadedFile.Key,
             location: uploadedFile.Location
         }
-
         await snsPublishNotification(snsData)
 
         res.status(200).send({ message: 'Success', data: uploadedFile.Location });
